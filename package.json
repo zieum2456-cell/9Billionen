@@ -1,0 +1,15 @@
+{
+  "name": "writing-log",
+  "version": "1.0.0",
+  "description": "집필 기록 게시판 — 퇴고일, 퇴고 메모(댓글), 키워드 태그, 상태 관리",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}
