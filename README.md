@@ -15,13 +15,17 @@
 
 ## 실행
 
-Node.js 18 이상이 필요합니다.
+화면은 `public/writing.html` 파일 하나에 모두 들어 있고, 여는 방법에 따라 저장 위치가 달라집니다.
 
-```bash
-npm start
-```
+| 여는 방법 | 저장 위치 |
+| --- | --- |
+| `public/writing.html`을 크롬으로 바로 열기 (더블클릭) | 그 브라우저의 저장소(localStorage) |
+| `npm start` 후 http://127.0.0.1:3000 접속 | `data/db.json` 파일 |
+| claude.ai 아티팩트로 열기 | claude.ai 계정의 비공개 저장소 |
 
-브라우저에서 http://127.0.0.1:3000 을 엽니다.
+파일을 직접 열거나 claude.ai에서 쓸 때는 화면 아래 **백업 내보내기**로 JSON 백업을 받아 둘 수 있고, **백업 불러오기**로 다른 브라우저나 다른 방법으로 옮길 수 있습니다. 백업 파일은 `data/db.json`과 같은 형식입니다.
+
+서버로 띄우려면 Node.js 18 이상이 필요합니다.
 
 | 환경 변수   | 기본값         | 설명                      |
 | ----------- | -------------- | ------------------------- |
@@ -42,7 +46,7 @@ npm test
 ```
 server.js        HTTP 서버와 REST API
 lib/store.js     데이터 저장소(JSON 파일)와 검증
-public/          화면 (index.html, app.js, style.css)
+public/writing.html  화면 (HTML·CSS·JS가 한 파일에 들어 있음)
 test/            node:test 테스트
 ```
 

@@ -1,0 +1,1022 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+<body>
+<!-- page:start -->
+<title>집필 기록</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+/* 레이아웃: 상단 바 + 가운데 한 단(최대 960px). 본문은 원고지처럼 줄이 그어진 종이. */
+:root {
+  --bg: #eef1ee;
+  --surface: #ffffff;
+  --ink: #1c2420;
+  --muted: #5f6b65;
+  --line: #d7ddd8;
+  --rule: #e3ebe5;
+  --accent: #2c6b58;
+  --accent-ink: #ffffff;
+  --danger: #b4322b;
+  --draft-bg: #fbefd2; --draft-fg: #7d5300;
+  --revising-bg: #e4e7fb; --revising-fg: #3442a0;
+  --done-bg: #d9f0e4; --done-fg: #1b6640;
+  --chip: #e4e9e5;
+  --shadow: 0 1px 2px rgba(20, 40, 30, .06);
+  --font-ui: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --font-text: "Gowun Batang", "Nanum Myeongjo", "AppleMyungjo", "Batang", Georgia, serif;
+  --line-h: 2rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #151a18; --surface: #1d2421; --ink: #e6ece8; --muted: #9aa8a1; --line: #2f3a35; --rule: #26302c;
+    --accent: #7cc4ab; --accent-ink: #0f1513; --danger: #ff8a80;
+    --draft-bg: #3a2f17; --draft-fg: #f3cf7e; --revising-bg: #252b4d; --revising-fg: #b4bdff;
+    --done-bg: #183427; --done-fg: #8fdcb3; --chip: #28322e; --shadow: none;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #151a18; --surface: #1d2421; --ink: #e6ece8; --muted: #9aa8a1; --line: #2f3a35; --rule: #26302c;
+  --accent: #7cc4ab; --accent-ink: #0f1513; --danger: #ff8a80;
+  --draft-bg: #3a2f17; --draft-fg: #f3cf7e; --revising-bg: #252b4d; --revising-fg: #b4bdff;
+  --done-bg: #183427; --done-fg: #8fdcb3; --chip: #28322e; --shadow: none;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-ui); font-size: 15px; line-height: 1.6; }
+[hidden] { display: none !important; }
+a { color: var(--accent); }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+h1, h2 { text-wrap: balance; }
+
+.bar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
+  background: var(--surface); border-bottom: 1px solid var(--line);
+}
+.bar-inner { max-width: 960px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 12px; }
+.brand {
+  display: flex; align-items: center; gap: 10px; background: none; border: 0; padding: 0; cursor: pointer;
+  font-family: var(--font-text); font-weight: 700; font-size: 1.2rem; color: var(--ink);
+}
+.brand-mark {
+  width: 22px; height: 22px; border: 1.5px solid var(--accent); border-radius: 2px;
+  background:
+    linear-gradient(var(--accent), var(--accent)) center / 1.5px 100% no-repeat,
+    linear-gradient(var(--accent), var(--accent)) center / 100% 1.5px no-repeat;
+  opacity: .85;
+}
+.bar .spacer { flex: 1; }
+
+.wrap { max-width: 960px; margin: 0 auto; padding-inline: 16px; padding-block: 20px 48px; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 7px 14px; border-radius: 6px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink); cursor: pointer; font-size: .92rem; white-space: nowrap;
+}
+.btn:hover { border-color: var(--muted); }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.btn-primary:hover { filter: brightness(1.06); border-color: var(--accent); }
+.btn-danger { color: var(--danger); }
+.btn-text { border: 0; background: none; padding: 2px 6px; color: var(--muted); cursor: pointer; font-size: .85rem; }
+.btn-text:hover { color: var(--danger); }
+.link { border: 0; background: none; padding: 0; color: var(--accent); cursor: pointer; font-size: .92rem; }
+
+input[type=text], input[type=search], select, textarea {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 7px 10px; min-width: 0;
+}
+textarea { width: 100%; resize: vertical; }
+
+/* 목록 */
+.summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
+@media (max-width: 560px) { .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.stat {
+  text-align: left; padding: 10px 14px; border-radius: 8px; background: var(--surface);
+  border: 1px solid var(--line); cursor: pointer; display: grid; gap: 0;
+}
+.stat:hover { border-color: var(--muted); }
+.stat[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.stat .num { font-size: 1.5rem; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.3; }
+.stat .lbl { font-size: .84rem; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.dot-draft { background: var(--draft-fg); } .dot-revising { background: var(--revising-fg); } .dot-done { background: var(--done-fg); }
+
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.filters input[type=search] { flex: 1 1 220px; }
+
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag-cloud { margin-bottom: 16px; }
+.tag {
+  display: inline-flex; align-items: center; gap: 3px; padding: 1px 10px; border-radius: 999px;
+  background: var(--chip); border: 1px solid transparent; font-size: .82rem; color: var(--ink); cursor: pointer;
+}
+.tag:hover { border-color: var(--line); }
+.tag[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.tag .cnt { opacity: .65; font-variant-numeric: tabular-nums; }
+.tag.static { cursor: default; font-size: .76rem; padding: 0 8px; }
+
+.badge { display: inline-block; padding: 1px 9px; border-radius: 4px; font-size: .78rem; font-weight: 600; white-space: nowrap; }
+.badge-draft { background: var(--draft-bg); color: var(--draft-fg); }
+.badge-revising { background: var(--revising-bg); color: var(--revising-fg); }
+.badge-done { background: var(--done-bg); color: var(--done-fg); }
+
+.board { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; box-shadow: var(--shadow); }
+.board-head, .row {
+  display: grid; grid-template-columns: 104px minmax(0, 1fr) 128px 84px 96px; gap: 12px; align-items: center; padding: 11px 16px;
+}
+.board-head { font-size: .78rem; color: var(--muted); border-bottom: 1px solid var(--line); letter-spacing: .02em; }
+.row {
+  width: 100%; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--line); cursor: pointer; color: var(--ink);
+}
+.row:last-child { border-bottom: 0; }
+.row:hover { background: var(--bg); }
+.row .title { font-weight: 600; overflow-wrap: anywhere; }
+.row .tags { margin-top: 3px; }
+.meta { font-size: .85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.memo-open { color: var(--danger); font-weight: 700; }
+.empty { padding: 48px 20px; text-align: center; color: var(--muted); display: grid; gap: 12px; justify-items: center; }
+.empty strong { color: var(--ink); font-family: var(--font-text); font-size: 1.15rem; }
+@media (max-width: 680px) {
+  .board-head { display: none; }
+  .row { grid-template-columns: minmax(0, 1fr); gap: 3px; }
+  .row .meta::before { content: attr(data-label) " · "; }
+}
+
+/* 상세 */
+.back { margin-bottom: 6px; }
+.post-title { font-family: var(--font-text); font-size: 1.75rem; line-height: 1.35; margin: 4px 0 10px; overflow-wrap: anywhere; }
+.facts { display: flex; flex-wrap: wrap; gap: 4px 18px; color: var(--muted); font-size: .88rem; font-variant-numeric: tabular-nums; }
+.facts b { color: var(--ink); font-weight: 600; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 14px 0 18px; }
+.actions .spacer { flex: 1; }
+.paper {
+  background-color: var(--surface);
+  background-image: repeating-linear-gradient(to bottom, transparent 0, transparent calc(var(--line-h) - 1px), var(--rule) calc(var(--line-h) - 1px), var(--rule) var(--line-h));
+  background-attachment: local;
+  border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow);
+  padding: var(--line-h) clamp(16px, 4vw, 40px); white-space: pre-wrap; overflow-wrap: anywhere;
+  font-family: var(--font-text); font-size: 1.06rem; line-height: var(--line-h); min-height: calc(var(--line-h) * 6);
+}
+.paper.blank { color: var(--muted); }
+
+.panel { margin-top: 30px; }
+.panel h2 { font-size: 1.05rem; margin: 0 0 10px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; }
+.panel h2 small { font-weight: 400; color: var(--muted); font-size: .84rem; }
+.memos { list-style: none; padding: 0; margin: 0 0 10px; display: grid; gap: 6px; }
+.memo {
+  display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+}
+.memo input[type=checkbox] { margin-top: 5px; width: 16px; height: 16px; flex: none; accent-color: var(--accent); }
+.memo .m-body { flex: 1; min-width: 0; }
+.memo .m-text { white-space: pre-wrap; overflow-wrap: anywhere; }
+.memo .m-date { font-size: .78rem; color: var(--muted); }
+.memo.resolved .m-text { text-decoration: line-through; color: var(--muted); }
+.memo-form { display: flex; gap: 8px; align-items: flex-end; }
+.memo-form textarea { flex: 1; }
+
+.revs { display: grid; gap: 6px; }
+.revs details { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; }
+.revs summary { cursor: pointer; font-size: .9rem; font-variant-numeric: tabular-nums; }
+.revs summary .note { color: var(--muted); margin-left: 6px; }
+.revs .old { white-space: pre-wrap; overflow-wrap: anywhere; font-family: var(--font-text); margin: 10px 0 4px; padding-top: 10px; border-top: 1px dashed var(--line); }
+.hint { color: var(--muted); font-size: .85rem; margin: 0; }
+
+/* 편집 */
+.form { display: grid; gap: 14px; }
+.field { display: grid; gap: 4px; font-size: .9rem; font-weight: 600; }
+.field .sub { font-weight: 400; color: var(--muted); font-size: .8rem; }
+.two { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 14px; }
+@media (max-width: 680px) { .two { grid-template-columns: minmax(0, 1fr); } }
+.body-input {
+  min-height: 26rem; font-family: var(--font-text); font-size: 1.04rem; line-height: var(--line-h);
+  background-image: repeating-linear-gradient(to bottom, transparent 0, transparent calc(var(--line-h) - 1px), var(--rule) calc(var(--line-h) - 1px), var(--rule) var(--line-h));
+  background-attachment: local; padding: 0 12px; background-position: 0 0;
+}
+.form-foot { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; align-items: center; }
+.form-foot .count { margin-right: auto; color: var(--muted); font-size: .85rem; font-variant-numeric: tabular-nums; }
+.error { color: var(--danger); font-size: .9rem; min-height: 1px; }
+
+/* 하단: 저장 위치와 백업 */
+.foot { margin-top: 36px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; color: var(--muted); font-size: .84rem; }
+.foot .where b { color: var(--ink); font-weight: 600; }
+.foot .spacer { flex: 1; }
+.notice { background: var(--draft-bg); color: var(--draft-fg); padding: 8px 12px; border-radius: 6px; font-size: .88rem; margin-bottom: 14px; }
+
+/* 확인 창, 알림 */
+.scrim { position: fixed; inset: 0; background: rgba(10, 16, 13, .45); display: grid; place-items: center; padding: 16px; z-index: 50; }
+.dialog { background: var(--surface); color: var(--ink); border-radius: 10px; padding: 20px; width: min(420px, 100%); display: grid; gap: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+.dialog p { margin: 0; overflow-wrap: anywhere; }
+.dialog .btns { display: flex; justify-content: flex-end; gap: 8px; }
+.toast {
+  position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 12px);
+  background: var(--ink); color: var(--bg); padding: 8px 16px; border-radius: 6px; font-size: .9rem;
+  opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 60; max-width: calc(100% - 32px);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+@media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
+</style>
+
+<header class="bar">
+  <div class="bar-inner">
+    <button class="brand" id="home" type="button"><span class="brand-mark" aria-hidden="true"></span>집필 기록</button>
+    <span class="spacer"></span>
+    <button class="btn btn-primary" id="new-post" type="button">새 글 쓰기</button>
+  </div>
+</header>
+<main class="wrap">
+  <div id="notice" class="notice" hidden></div>
+  <div id="app"><div class="empty">불러오는 중…</div></div>
+  <footer class="foot">
+    <span class="where">저장 위치: <b id="where">확인 중</b></span>
+    <span class="spacer"></span>
+    <button class="link" id="export" type="button" hidden>백업 내보내기</button>
+    <button class="link" id="import" type="button" hidden>백업 불러오기</button>
+    <input type="file" id="import-file" accept="application/json,.json" hidden>
+  </footer>
+</main>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+'use strict';
+
+const STATUS = { draft: '초안 작성 중', revising: '퇴고 중', done: '퇴고 완료' };
+const STATUS_KEYS = Object.keys(STATUS);
+
+class UserError extends Error {}
+
+// ---------- 공통 규칙 (lib/store.js 와 같은 규칙) ----------
+
+const nowIso = () => new Date().toISOString();
+const newId = () =>
+  (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10));
+
+function normalizeTags(tags) {
+  if (tags == null) return [];
+  const list = Array.isArray(tags) ? tags : String(tags).split(',');
+  const seen = new Set();
+  const out = [];
+  for (const raw of list) {
+    const tag = String(raw).trim().replace(/^#/, '').trim();
+    if (!tag) continue;
+    if (tag.length > 30) throw new UserError(`태그는 30자 이하여야 합니다: ${tag}`);
+    if (seen.has(tag.toLowerCase())) continue;
+    seen.add(tag.toLowerCase());
+    out.push(tag);
+  }
+  if (out.length > 20) throw new UserError('태그는 최대 20개까지 붙일 수 있습니다.');
+  return out;
+}
+function checkStatus(s) {
+  if (!STATUS_KEYS.includes(s)) throw new UserError(`알 수 없는 상태입니다: ${s}`);
+  return s;
+}
+function checkTitle(t) {
+  t = String(t ?? '').trim();
+  if (!t) throw new UserError('제목을 입력해 주세요.');
+  if (t.length > 200) throw new UserError('제목은 200자 이하여야 합니다.');
+  return t;
+}
+const chars = (s) => [...String(s || '')].length;
+const clone = (o) => JSON.parse(JSON.stringify(o));
+
+// ---------- 저장소 ----------
+// LocalEngine: 글 목록을 메모리에 들고, 바뀐 글만 어댑터로 저장한다.
+// 어댑터: load / savePost / deletePost / revisions / addRevision / check
+
+class LocalEngine {
+  constructor(adapter) {
+    this.a = adapter;
+    this.kind = adapter.kind;
+    this.label = adapter.label;
+    this.canBackup = true;
+    this.posts = [];
+  }
+  async init() {
+    this.posts = (await this.a.load()).map(clone);
+  }
+  _find(id) {
+    const p = this.posts.find((x) => x.id === id);
+    if (!p) throw new UserError('글을 찾을 수 없습니다.');
+    return p;
+  }
+  async _commit(next) {
+    this.a.check?.(next);
+    await this.a.savePost(next);
+    const i = this.posts.findIndex((x) => x.id === next.id);
+    if (i >= 0) this.posts[i] = next;
+    else this.posts.push(next);
+    return next;
+  }
+  async list({ status, tag, q, sort } = {}) {
+    let posts = this.posts;
+    if (status) posts = posts.filter((p) => p.status === status);
+    if (tag) posts = posts.filter((p) => p.tags.some((t) => t.toLowerCase() === tag.toLowerCase()));
+    if (q) {
+      const n = q.toLowerCase();
+      posts = posts.filter((p) => p.title.toLowerCase().includes(n) || p.body.toLowerCase().includes(n));
+    }
+    const key = sort === 'created' ? 'createdAt' : sort === 'updated' ? 'updatedAt' : 'lastRevisedAt';
+    return [...posts]
+      .sort((a, b) => (b[key] || b.createdAt).localeCompare(a[key] || a.createdAt))
+      .map((p) => ({
+        id: p.id, title: p.title, status: p.status, tags: p.tags,
+        createdAt: p.createdAt, updatedAt: p.updatedAt, lastRevisedAt: p.lastRevisedAt,
+        revisionCount: p.revisionCount || 0, charCount: chars(p.body),
+        commentCount: p.comments.length, openCommentCount: p.comments.filter((c) => !c.resolved).length,
+      }));
+  }
+  async get(id) {
+    const p = this._find(id);
+    const revisions = await this.a.revisions(id);
+    return { ...clone(p), revisions };
+  }
+  async create({ title, body = '', status = 'draft', tags = [] }) {
+    const ts = nowIso();
+    return this._commit({
+      id: newId(), title: checkTitle(title), body: String(body ?? ''), status: checkStatus(status), tags: normalizeTags(tags),
+      createdAt: ts, updatedAt: ts, lastRevisedAt: null, revisionCount: 0, comments: [],
+    });
+  }
+  async update(id, ch) {
+    const cur = this._find(id);
+    const next = clone(cur);
+    if (ch.title !== undefined) next.title = checkTitle(ch.title);
+    if (ch.body !== undefined) next.body = String(ch.body ?? '');
+    if (ch.status !== undefined) next.status = checkStatus(ch.status);
+    if (ch.tags !== undefined) next.tags = normalizeTags(ch.tags);
+    const ts = nowIso();
+    next.updatedAt = ts;
+    if (next.title !== cur.title || next.body !== cur.body) {
+      next.lastRevisedAt = ts;
+      next.revisionCount = (cur.revisionCount || 0) + 1;
+      this.a.check?.(next);
+      await this.a.addRevision(id, {
+        id: newId(), savedAt: ts, title: cur.title, body: cur.body, note: String(ch.revisionNote || '').trim(),
+      });
+    }
+    return this._commit(next);
+  }
+  async remove(id) {
+    this._find(id);
+    await this.a.deletePost(id);
+    this.posts = this.posts.filter((p) => p.id !== id);
+  }
+  async addComment(id, text) {
+    const t = String(text ?? '').trim();
+    if (!t) throw new UserError('메모 내용을 입력해 주세요.');
+    if (t.length > 5000) throw new UserError('메모는 5000자 이하여야 합니다.');
+    const next = clone(this._find(id));
+    next.comments.push({ id: newId(), text: t, createdAt: nowIso(), resolved: false, resolvedAt: null });
+    await this._commit(next);
+  }
+  async setResolved(id, cid, resolved) {
+    const next = clone(this._find(id));
+    const c = next.comments.find((x) => x.id === cid);
+    if (!c) throw new UserError('메모를 찾을 수 없습니다.');
+    c.resolved = !!resolved;
+    c.resolvedAt = resolved ? nowIso() : null;
+    await this._commit(next);
+  }
+  async deleteComment(id, cid) {
+    const next = clone(this._find(id));
+    next.comments = next.comments.filter((c) => c.id !== cid);
+    await this._commit(next);
+  }
+  async tags() {
+    const m = new Map();
+    for (const p of this.posts)
+      for (const t of p.tags) {
+        const e = m.get(t.toLowerCase()) || { tag: t, count: 0 };
+        e.count++;
+        m.set(t.toLowerCase(), e);
+      }
+    return [...m.values()].sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
+  }
+  async stats() {
+    const byStatus = Object.fromEntries(STATUS_KEYS.map((s) => [s, 0]));
+    for (const p of this.posts) byStatus[p.status] = (byStatus[p.status] || 0) + 1;
+    return { total: this.posts.length, byStatus };
+  }
+  async exportAll() {
+    const posts = [];
+    for (const p of this.posts) {
+      const { revisionCount, ...rest } = clone(p);
+      posts.push({ ...rest, revisions: await this.a.revisions(p.id) });
+    }
+    return { app: 'writing-log', exportedAt: nowIso(), posts };
+  }
+  // 같은 id의 글은 백업 내용으로 덮어쓰고, 나머지는 새로 추가한다.
+  async importAll(data) {
+    if (!data || !Array.isArray(data.posts)) throw new UserError('집필 기록 백업 파일이 아닙니다.');
+    let n = 0;
+    for (const raw of data.posts) {
+      const id = /^[\w-]{1,100}$/.test(raw.id || '') ? raw.id : newId();
+      const revisions = Array.isArray(raw.revisions) ? raw.revisions : [];
+      const post = {
+        id, title: checkTitle(raw.title), body: String(raw.body ?? ''),
+        status: STATUS_KEYS.includes(raw.status) ? raw.status : 'draft', tags: normalizeTags(raw.tags),
+        createdAt: raw.createdAt || nowIso(), updatedAt: raw.updatedAt || nowIso(), lastRevisedAt: raw.lastRevisedAt || null,
+        revisionCount: revisions.length,
+        comments: (Array.isArray(raw.comments) ? raw.comments : []).map((c) => ({
+          id: /^[\w-]{1,100}$/.test(c.id || '') ? c.id : newId(), text: String(c.text ?? ''),
+          createdAt: c.createdAt || nowIso(), resolved: !!c.resolved, resolvedAt: c.resolvedAt || null,
+        })),
+      };
+      if (this.posts.some((p) => p.id === id)) await this.a.deletePost(id);
+      this.posts = this.posts.filter((p) => p.id !== id);
+      for (const r of revisions) {
+        await this.a.addRevision(id, {
+          id: /^[\w-]{1,100}$/.test(r.id || '') ? r.id : newId(), savedAt: r.savedAt || nowIso(),
+          title: String(r.title ?? ''), body: String(r.body ?? ''), note: String(r.note ?? ''),
+        });
+      }
+      await this._commit(post);
+      n++;
+    }
+    return n;
+  }
+}
+
+// 브라우저 저장소(localStorage). 파일을 직접 크롬으로 열었을 때 쓴다.
+class BrowserAdapter {
+  constructor(storage) {
+    this.kind = storage ? 'browser' : 'memory';
+    this.label = storage ? '이 브라우저 (백업을 자주 내보내 두세요)' : '임시 메모리 (창을 닫으면 사라집니다)';
+    this.storage = storage;
+    this.key = 'writing-log:v1';
+    this.data = { posts: [], revisions: {} };
+  }
+  async load() {
+    if (this.storage) {
+      const raw = this.storage.getItem(this.key);
+      if (raw) this.data = JSON.parse(raw);
+    }
+    this.data.posts ||= [];
+    this.data.revisions ||= {};
+    return this.data.posts;
+  }
+  _flush() {
+    if (!this.storage) return;
+    try {
+      this.storage.setItem(this.key, JSON.stringify(this.data));
+    } catch (e) {
+      throw new UserError('브라우저 저장 공간이 가득 찼습니다. 백업을 내보낸 뒤 오래된 글을 정리해 주세요.');
+    }
+  }
+  async savePost(p) {
+    const i = this.data.posts.findIndex((x) => x.id === p.id);
+    if (i >= 0) this.data.posts[i] = clone(p);
+    else this.data.posts.push(clone(p));
+    this._flush();
+  }
+  async deletePost(id) {
+    this.data.posts = this.data.posts.filter((p) => p.id !== id);
+    delete this.data.revisions[id];
+    this._flush();
+  }
+  async revisions(id) {
+    return clone(this.data.revisions[id] || []);
+  }
+  async addRevision(id, rev) {
+    (this.data.revisions[id] ||= []).push(rev);
+    this._flush();
+  }
+}
+
+// claude.ai 에서 열었을 때: 계정에 묶인 비공개 저장소(db)의 data/users/<내 id>/ 아래에 저장한다.
+class CloudAdapter {
+  constructor(db, uid) {
+    this.kind = 'cloud';
+    this.label = 'claude.ai 계정 (나만 볼 수 있음)';
+    this.col = db.collection('data/users/' + uid);
+    this.queue = new Map();
+  }
+  // 문서 하나에는 한 번에 하나의 쓰기만 보낸다.
+  _serial(key, fn) {
+    const run = (this.queue.get(key) || Promise.resolve()).catch(() => {}).then(fn);
+    this.queue.set(key, run);
+    return run;
+  }
+  _err(e) {
+    if (e && e.code === 'quota_exceeded') return new UserError('저장 공간 한도에 도달했습니다. 백업을 내보낸 뒤 오래된 글을 정리해 주세요.');
+    if (e && e.code === 'invalid_argument') return new UserError('저장하지 못했습니다. 이 글을 쓸 권한이 없거나 글이 너무 깁니다.');
+    return new UserError('저장하지 못했습니다. 잠시 뒤 다시 시도해 주세요.');
+  }
+  check(p) {
+    if (new Blob([JSON.stringify(p)]).size > 240 * 1024)
+      throw new UserError('글 하나가 너무 깁니다(약 7만 자 이하). 장(章)별로 나눠서 써 주세요.');
+  }
+  async load() {
+    const snap = await this.col.limit(1000).get();
+    return snap.docs.map((d) => d.data());
+  }
+  savePost(p) {
+    return this._serial(p.id, () => this.col.doc(p.id).set(clone(p))).catch((e) => { throw this._err(e); });
+  }
+  deletePost(id) {
+    return this._serial(id, async () => {
+      const revs = this.col.doc(id).collection('revisions');
+      const snap = await revs.limit(1000).get();
+      for (const d of snap.docs) await revs.doc(d.id).delete();
+      await this.col.doc(id).delete();
+    }).catch((e) => { throw this._err(e); });
+  }
+  async revisions(id) {
+    const snap = await this.col.doc(id).collection('revisions').orderBy('savedAt').limit(1000).get();
+    return snap.docs.map((d) => clone(d.data()));
+  }
+  addRevision(id, rev) {
+    return this.col.doc(id).collection('revisions').doc(rev.id).set(rev).catch((e) => { throw this._err(e); });
+  }
+}
+
+// npm start 로 띄운 로컬 서버(data/db.json)에 저장한다.
+class ServerEngine {
+  constructor() {
+    this.kind = 'server';
+    this.label = '로컬 서버 (data/db.json)';
+    this.canBackup = false;
+  }
+  async _call(method, url, body) {
+    const res = await fetch(url, {
+      method,
+      headers: body ? { 'Content-Type': 'application/json' } : {},
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    if (res.status === 204) return null;
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new UserError(data.error || `요청 실패 (${res.status})`);
+    return data;
+  }
+  async init() {}
+  list(f) {
+    const ps = new URLSearchParams();
+    for (const [k, v] of Object.entries(f)) if (v) ps.set(k, v);
+    return this._call('GET', '/api/posts?' + ps);
+  }
+  get(id) { return this._call('GET', `/api/posts/${encodeURIComponent(id)}`); }
+  create(p) { return this._call('POST', '/api/posts', p); }
+  update(id, ch) { return this._call('PUT', `/api/posts/${encodeURIComponent(id)}`, ch); }
+  remove(id) { return this._call('DELETE', `/api/posts/${encodeURIComponent(id)}`); }
+  addComment(id, text) { return this._call('POST', `/api/posts/${encodeURIComponent(id)}/comments`, { text }); }
+  setResolved(id, cid, resolved) {
+    return this._call('PATCH', `/api/posts/${encodeURIComponent(id)}/comments/${encodeURIComponent(cid)}`, { resolved });
+  }
+  deleteComment(id, cid) {
+    return this._call('DELETE', `/api/posts/${encodeURIComponent(id)}/comments/${encodeURIComponent(cid)}`);
+  }
+  tags() { return this._call('GET', '/api/tags'); }
+  stats() { return this._call('GET', '/api/stats'); }
+}
+
+async function pickEngine() {
+  // 1) 로컬 서버가 이 페이지를 보내 준 경우
+  if (/^https?:$/.test(location.protocol) && !window.claude) {
+    try {
+      const ctl = new AbortController();
+      setTimeout(() => ctl.abort(), 1500);
+      const res = await fetch('/api/stats', { signal: ctl.signal });
+      if (res.ok && (await res.json()).byStatus) return new ServerEngine();
+    } catch {}
+  }
+  // 2) claude.ai 에서 연 경우
+  if (window.claude && typeof window.claude.use === 'function') {
+    try {
+      const [db, user] = await Promise.all([window.claude.use('db'), window.claude.use('user')]);
+      const uid = user ? await user.id() : null;
+      if (db && uid) {
+        const engine = new LocalEngine(new CloudAdapter(db, uid));
+        await engine.init();
+        return engine;
+      }
+    } catch {}
+    showNotice('계정 저장소에 연결하지 못해 이 브라우저에 저장합니다. 로그인 상태를 확인해 주세요.');
+  }
+  // 3) 파일을 직접 연 경우: 브라우저 저장소
+  let storage = null;
+  try {
+    storage = window.localStorage;
+    storage.setItem('writing-log:probe', '1');
+    storage.removeItem('writing-log:probe');
+  } catch {
+    storage = null;
+    showNotice('이 브라우저에서는 저장소를 쓸 수 없어 창을 닫으면 내용이 사라집니다. 백업 내보내기로 저장해 두세요.');
+  }
+  const engine = new LocalEngine(new BrowserAdapter(storage));
+  try {
+    await engine.init();
+  } catch {
+    showNotice('저장된 데이터를 읽지 못했습니다. 새로 시작합니다.');
+    engine.a.data = { posts: [], revisions: {} };
+    engine.posts = [];
+  }
+  return engine;
+}
+
+// ---------- 화면 도우미 ----------
+
+const app = document.getElementById('app');
+let store = null;
+
+function esc(v) {
+  return String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+}
+function fmtDate(iso, time = false) {
+  if (!iso) return '—';
+  const o = { year: 'numeric', month: '2-digit', day: '2-digit' };
+  if (time) Object.assign(o, { hour: '2-digit', minute: '2-digit' });
+  return new Date(iso).toLocaleString('ko-KR', o);
+}
+function relDate(iso) {
+  if (!iso) return '퇴고 전';
+  const d = Math.floor((Date.now() - new Date(iso)) / 86400000);
+  if (d <= 0) return '오늘';
+  if (d === 1) return '어제';
+  if (d < 30) return `${d}일 전`;
+  return fmtDate(iso);
+}
+const badge = (s) => `<span class="badge badge-${esc(s)}">${esc(STATUS[s] || s)}</span>`;
+const num = (n) => Number(n).toLocaleString('ko-KR');
+// 200자 원고지 기준 매수
+const sheets = (n) => (n ? Math.max(0.1, Math.round((n / 200) * 10) / 10) : 0);
+
+function showNotice(msg) {
+  const el = document.getElementById('notice');
+  el.textContent = msg;
+  el.hidden = false;
+}
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2000);
+}
+// confirm() 대신 쓰는 확인 창
+function ask(message, okLabel = '확인', danger = false) {
+  return new Promise((resolve) => {
+    const scrim = document.createElement('div');
+    scrim.className = 'scrim';
+    scrim.innerHTML = `<div class="dialog" role="alertdialog" aria-modal="true">
+      <p></p>
+      <div class="btns"><button class="btn" data-v="0" type="button">취소</button>
+      <button class="btn ${danger ? 'btn-danger' : 'btn-primary'}" data-v="1" type="button"></button></div></div>`;
+    scrim.querySelector('p').textContent = message;
+    scrim.querySelector('[data-v="1"]').textContent = okLabel;
+    const done = (v) => { scrim.remove(); document.removeEventListener('keydown', onKey); resolve(v); };
+    const onKey = (e) => { if (e.key === 'Escape') done(false); };
+    scrim.addEventListener('click', (e) => {
+      if (e.target === scrim) done(false);
+      const b = e.target.closest('[data-v]');
+      if (b) done(b.dataset.v === '1');
+    });
+    document.addEventListener('keydown', onKey);
+    document.body.appendChild(scrim);
+    scrim.querySelector('[data-v="1"]').focus();
+  });
+}
+async function guard(fn) {
+  try {
+    return await fn();
+  } catch (e) {
+    console.error(e);
+    toast(e instanceof UserError ? e.message : '문제가 생겼습니다. 다시 시도해 주세요.');
+  }
+}
+
+// ---------- 화면 전환 ----------
+
+let route = { view: 'list' };
+let dirty = false;
+
+async function go(next) {
+  if (dirty && !(await ask('저장하지 않은 내용이 있습니다. 이 화면을 나갈까요?', '나가기', true))) return;
+  dirty = false;
+  route = next;
+  window.scrollTo(0, 0);
+  await render();
+}
+async function render() {
+  try {
+    if (route.view === 'post') await renderPost(route.id);
+    else if (route.view === 'edit') await renderEditor(route.id);
+    else await renderList();
+  } catch (e) {
+    console.error(e);
+    app.innerHTML = `<div class="empty"><span></span><button class="btn" type="button">목록으로</button></div>`;
+    app.querySelector('span').textContent = e instanceof UserError ? e.message : '화면을 불러오지 못했습니다.';
+    app.querySelector('button').onclick = () => go({ view: 'list' });
+  }
+}
+
+// ---------- 목록 ----------
+
+const filters = { status: '', tag: '', q: '', sort: 'revised' };
+
+async function renderList() {
+  const [posts, tags, stats] = await Promise.all([store.list(filters), store.tags(), store.stats()]);
+  const stat = (key, label) => `
+    <button class="stat" type="button" data-status="${key}" aria-pressed="${filters.status === key}">
+      <span class="num">${num(key ? stats.byStatus[key] || 0 : stats.total)}</span>
+      <span class="lbl">${key ? `<i class="dot dot-${key}"></i>` : ''}${label}</span>
+    </button>`;
+  const rows = posts.map((p) => `
+    <button class="row" type="button" data-id="${esc(p.id)}">
+      <div>${badge(p.status)}</div>
+      <div>
+        <div class="title">${esc(p.title)}</div>
+        ${p.tags.length ? `<div class="tags">${p.tags.map((t) => `<span class="tag static">#${esc(t)}</span>`).join('')}</div>` : ''}
+      </div>
+      <div class="meta" data-label="최신 퇴고" title="${esc(fmtDate(p.lastRevisedAt, true))}">${esc(relDate(p.lastRevisedAt))}${p.revisionCount ? ` · ${p.revisionCount}회` : ''}</div>
+      <div class="meta" data-label="퇴고 메모">${p.commentCount ? `<span class="${p.openCommentCount ? 'memo-open' : ''}">${p.openCommentCount}</span> / ${p.commentCount}` : '—'}</div>
+      <div class="meta" data-label="분량">${num(p.charCount)}자</div>
+    </button>`).join('');
+
+  const empty = stats.total
+    ? `<div class="empty">조건에 맞는 글이 없습니다.<button class="link" type="button" id="clear">필터 지우기</button></div>`
+    : `<div class="empty"><strong>첫 원고를 시작해 보세요</strong>
+        글마다 상태와 키워드를 붙이고, 고칠 점은 메모로 남겨 두면<br>다음 퇴고 때 이 게시판에서 바로 이어 갈 수 있습니다.
+        <button class="btn btn-primary" type="button" id="first">새 글 쓰기</button></div>`;
+
+  app.innerHTML = `
+    <div class="summary">${stat('', '전체')}${STATUS_KEYS.map((k) => stat(k, STATUS[k])).join('')}</div>
+    <div class="filters">
+      <input type="search" id="q" placeholder="제목·본문 검색" value="${esc(filters.q)}" aria-label="검색">
+      <select id="sort" aria-label="정렬">
+        <option value="revised">최신 퇴고순</option>
+        <option value="updated">최근 수정순</option>
+        <option value="created">작성일순</option>
+      </select>
+    </div>
+    ${tags.length ? `<div class="tags tag-cloud">${tags.map((t) => `<button class="tag" type="button" data-tag="${esc(t.tag)}" aria-pressed="${filters.tag.toLowerCase() === t.tag.toLowerCase()}">#${esc(t.tag)}<span class="cnt">${t.count}</span></button>`).join('')}</div>` : ''}
+    <div class="board">
+      <div class="board-head"><div>상태</div><div>제목 · 태그</div><div>최신 퇴고일</div><div>남은 메모</div><div>분량</div></div>
+      ${posts.length ? rows : empty}
+    </div>`;
+
+  const sort = app.querySelector('#sort');
+  sort.value = filters.sort;
+  sort.onchange = () => { filters.sort = sort.value; renderList(); };
+  app.querySelectorAll('.stat').forEach((b) => (b.onclick = () => { filters.status = b.dataset.status; renderList(); }));
+  app.querySelectorAll('.tag-cloud .tag').forEach((b) => (b.onclick = () => {
+    filters.tag = filters.tag.toLowerCase() === b.dataset.tag.toLowerCase() ? '' : b.dataset.tag;
+    renderList();
+  }));
+  app.querySelectorAll('.row').forEach((b) => (b.onclick = () => go({ view: 'post', id: b.dataset.id })));
+  const first = app.querySelector('#first');
+  if (first) first.onclick = () => go({ view: 'edit' });
+  const clear = app.querySelector('#clear');
+  if (clear) clear.onclick = () => { Object.assign(filters, { status: '', tag: '', q: '' }); renderList(); };
+
+  const q = app.querySelector('#q');
+  let t;
+  q.oninput = () => {
+    clearTimeout(t);
+    t = setTimeout(async () => {
+      filters.q = q.value.trim();
+      await renderList();
+      const again = app.querySelector('#q');
+      again.focus();
+      again.setSelectionRange(again.value.length, again.value.length);
+    }, 300);
+  };
+}
+
+// ---------- 글 상세 ----------
+
+async function renderPost(id) {
+  const post = await store.get(id);
+  const open = post.comments.filter((c) => !c.resolved);
+  const done = post.comments.filter((c) => c.resolved);
+  const n = chars(post.body);
+  const memo = (c) => `
+    <li class="memo ${c.resolved ? 'resolved' : ''}">
+      <input type="checkbox" id="m-${esc(c.id)}" data-cid="${esc(c.id)}" ${c.resolved ? 'checked' : ''} aria-label="반영 완료">
+      <div class="m-body">
+        <div class="m-text">${esc(c.text)}</div>
+        <div class="m-date">${esc(fmtDate(c.createdAt, true))}${c.resolved ? ` · 반영 ${esc(fmtDate(c.resolvedAt, true))}` : ''}</div>
+      </div>
+      <button class="btn-text" type="button" data-del="${esc(c.id)}">삭제</button>
+    </li>`;
+  const revs = [...post.revisions].reverse();
+
+  app.innerHTML = `
+    <div class="back"><button class="link" type="button" id="back">← 목록</button></div>
+    <h1 class="post-title">${esc(post.title)}</h1>
+    <div class="facts">
+      <span>최신 퇴고일 <b>${esc(fmtDate(post.lastRevisedAt, true))}</b></span>
+      <span>퇴고 ${post.revisions.length}회</span>
+      <span>처음 쓴 날 ${esc(fmtDate(post.createdAt))}</span>
+      <span>${num(n)}자 · 원고지 약 ${sheets(n)}매</span>
+    </div>
+    ${post.tags.length ? `<div class="tags" style="margin-top:10px">${post.tags.map((t) => `<button class="tag" type="button" data-tag="${esc(t)}">#${esc(t)}</button>`).join('')}</div>` : ''}
+    <div class="actions">
+      ${badge(post.status)}
+      <select id="status" aria-label="상태 바꾸기">
+        ${STATUS_KEYS.map((k) => `<option value="${k}" ${k === post.status ? 'selected' : ''}>${STATUS[k]}</option>`).join('')}
+      </select>
+      <span class="spacer"></span>
+      <button class="btn btn-primary" type="button" id="edit">퇴고하기</button>
+      <button class="btn btn-danger" type="button" id="delete">삭제</button>
+    </div>
+    <div class="paper ${post.body ? '' : 'blank'}">${post.body ? esc(post.body) : '아직 본문이 없습니다.'}</div>
+
+    <section class="panel">
+      <h2>다음 퇴고를 위한 메모 <small>남은 ${open.length}개 · 반영 ${done.length}개</small></h2>
+      ${post.comments.length ? `<ul class="memos">${open.map(memo).join('')}${done.map(memo).join('')}</ul>` : ''}
+      <form class="memo-form" id="memo-form">
+        <textarea id="memo-text" rows="2" placeholder="다음 퇴고 때 고칠 점 (Ctrl+Enter로 등록)" aria-label="퇴고 메모"></textarea>
+        <button class="btn btn-primary" type="submit">등록</button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>퇴고 기록 <small>이전 원고 ${revs.length}개</small></h2>
+      ${revs.length ? `<div class="revs">${revs.map((r, i) => `
+        <details>
+          <summary>${esc(fmtDate(r.savedAt, true))} · ${revs.length - i}번째 퇴고 직전 원고${r.note ? `<span class="note">“${esc(r.note)}”</span>` : ''}</summary>
+          <div class="old"><b>${esc(r.title)}</b>\n\n${esc(r.body)}</div>
+        </details>`).join('')}</div>`
+      : '<p class="hint">본문이나 제목을 고쳐 저장하면 그 전 원고가 여기에 남습니다.</p>'}
+    </section>`;
+
+  app.querySelector('#back').onclick = () => go({ view: 'list' });
+  app.querySelectorAll('.tags .tag').forEach((b) => (b.onclick = () => {
+    Object.assign(filters, { tag: b.dataset.tag, status: '', q: '' });
+    go({ view: 'list' });
+  }));
+  app.querySelector('#edit').onclick = () => go({ view: 'edit', id });
+  app.querySelector('#status').onchange = (e) => guard(async () => {
+    await store.update(id, { status: e.target.value });
+    toast(`상태를 ‘${STATUS[e.target.value]}’(으)로 바꿨습니다.`);
+    await renderPost(id);
+  });
+  app.querySelector('#delete').onclick = () => guard(async () => {
+    if (!(await ask(`“${post.title}” 글을 삭제할까요? 퇴고 기록과 메모도 함께 사라집니다.`, '삭제', true))) return;
+    await store.remove(id);
+    toast('글을 삭제했습니다.');
+    await go({ view: 'list' });
+  });
+
+  const text = app.querySelector('#memo-text');
+  const submit = () => guard(async () => {
+    if (!text.value.trim()) return;
+    await store.addComment(id, text.value);
+    await renderPost(id);
+    app.querySelector('#memo-text').focus();
+  });
+  app.querySelector('#memo-form').onsubmit = (e) => { e.preventDefault(); submit(); };
+  text.onkeydown = (e) => {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); submit(); }
+  };
+  app.querySelectorAll('.memo input[type=checkbox]').forEach((b) => (b.onchange = () => guard(async () => {
+    await store.setResolved(id, b.dataset.cid, b.checked);
+    await renderPost(id);
+  })));
+  app.querySelectorAll('[data-del]').forEach((b) => (b.onclick = () => guard(async () => {
+    if (!(await ask('이 메모를 삭제할까요?', '삭제', true))) return;
+    await store.deleteComment(id, b.dataset.del);
+    await renderPost(id);
+  })));
+}
+
+// ---------- 새 글 / 퇴고 ----------
+
+async function renderEditor(id) {
+  const post = id ? await store.get(id) : { title: '', body: '', status: 'draft', tags: [], comments: [] };
+  const open = post.comments.filter((c) => !c.resolved);
+
+  app.innerHTML = `
+    <div class="back"><button class="link" type="button" id="back">← ${id ? '글로 돌아가기' : '목록'}</button></div>
+    <h1 class="post-title">${id ? '퇴고하기' : '새 글 쓰기'}</h1>
+    ${open.length ? `<section class="panel" style="margin:0 0 18px">
+        <h2>반영할 메모 <small>${open.length}개</small></h2>
+        <ul class="memos">${open.map((c) => `<li class="memo"><div class="m-body"><div class="m-text">${esc(c.text)}</div></div></li>`).join('')}</ul>
+      </section>` : ''}
+    <form class="form" id="editor">
+      <label class="field">제목<input type="text" id="f-title" maxlength="200" value="${esc(post.title)}"></label>
+      <div class="two">
+        <label class="field">상태
+          <select id="f-status">${STATUS_KEYS.map((k) => `<option value="${k}" ${k === post.status ? 'selected' : ''}>${STATUS[k]}</option>`).join('')}</select>
+        </label>
+        <label class="field">키워드 태그 <span class="sub">쉼표로 구분 (예: 단편, 1인칭, 겨울)</span>
+          <input type="text" id="f-tags" value="${esc(post.tags.join(', '))}" placeholder="단편, 1인칭">
+        </label>
+      </div>
+      <label class="field">본문<textarea id="f-body" class="body-input">${esc(post.body)}</textarea></label>
+      ${id ? `<label class="field">이번 퇴고에서 고친 점 <span class="sub">선택 · 퇴고 기록에 함께 남습니다</span>
+        <input type="text" id="f-note" maxlength="200" placeholder="예: 첫 문장 교체, 2장 시점 통일"></label>` : ''}
+      <div class="error" id="err" role="alert"></div>
+      <div class="form-foot">
+        <span class="count" id="count"></span>
+        <button class="btn" type="button" id="cancel">취소</button>
+        <button class="btn btn-primary" type="submit">저장</button>
+      </div>
+    </form>`;
+
+  const $ = (s) => app.querySelector(s);
+  const count = () => {
+    const v = $('#f-body').value;
+    const n = chars(v);
+    $('#count').textContent = `${num(n)}자 (공백 제외 ${num(chars(v.replace(/\s/g, '')))}자) · 원고지 약 ${sheets(n)}매`;
+  };
+  count();
+  dirty = false;
+  $('#editor').oninput = () => { dirty = true; count(); };
+  const leave = () => go(id ? { view: 'post', id } : { view: 'list' });
+  $('#back').onclick = leave;
+  $('#cancel').onclick = leave;
+  $('#editor').onsubmit = async (e) => {
+    e.preventDefault();
+    const btn = e.submitter;
+    if (btn) btn.disabled = true;
+    try {
+      const data = { title: $('#f-title').value, body: $('#f-body').value, status: $('#f-status').value, tags: $('#f-tags').value };
+      if (id) data.revisionNote = $('#f-note').value;
+      const saved = id ? await store.update(id, data) : await store.create(data);
+      dirty = false;
+      toast('저장했습니다.');
+      await go({ view: 'post', id: saved.id });
+    } catch (err) {
+      console.error(err);
+      $('#err').textContent = err instanceof UserError ? err.message : '저장하지 못했습니다. 다시 시도해 주세요.';
+      if (btn) btn.disabled = false;
+    }
+  };
+  (id ? $('#f-body') : $('#f-title')).focus();
+}
+
+// ---------- 백업 ----------
+
+async function exportBackup() {
+  const data = JSON.stringify(await store.exportAll(), null, 2);
+  const filename = `집필기록-백업-${new Date().toISOString().slice(0, 10)}.json`;
+  const downloads = window.claude?.use ? await window.claude.use('downloads') : null;
+  if (downloads) {
+    try {
+      await downloads.save({ filename, data });
+    } catch (e) {
+      if (e && e.code !== 'declined') toast('백업 파일을 저장하지 못했습니다.');
+    }
+    return;
+  }
+  const url = URL.createObjectURL(new Blob([data], { type: 'application/json' }));
+  const a = Object.assign(document.createElement('a'), { href: url, download: filename });
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+async function importBackup(file) {
+  const data = JSON.parse(await file.text());
+  const count = data && Array.isArray(data.posts) ? data.posts.length : 0;
+  if (!(await ask(`백업에 있는 글 ${count}편을 불러올까요? 같은 글이 이미 있으면 백업 내용으로 바뀝니다.`, '불러오기'))) return;
+  const n = await store.importAll(data);
+  toast(`${n}편을 불러왔습니다.`);
+  await go({ view: 'list' });
+}
+
+// ---------- 시작 ----------
+
+document.getElementById('home').onclick = () => go({ view: 'list' });
+document.getElementById('new-post').onclick = () => go({ view: 'edit' });
+window.addEventListener('beforeunload', (e) => { if (dirty) e.preventDefault(); });
+
+(async () => {
+  store = await pickEngine();
+  document.getElementById('where').textContent = store.label;
+  if (store.canBackup) {
+    const exp = document.getElementById('export');
+    const imp = document.getElementById('import');
+    const file = document.getElementById('import-file');
+    exp.hidden = imp.hidden = false;
+    exp.onclick = () => guard(exportBackup);
+    imp.onclick = () => file.click();
+    file.onchange = () => guard(async () => {
+      const f = file.files[0];
+      file.value = '';
+      if (f) {
+        try {
+          await importBackup(f);
+        } catch (e) {
+          throw e instanceof UserError ? e : new UserError('백업 파일을 읽지 못했습니다.');
+        }
+      }
+    });
+  }
+  await render();
+})();
+</script>
+<!-- page:end -->
+</body>
+</html>
